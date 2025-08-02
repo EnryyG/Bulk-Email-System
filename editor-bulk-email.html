@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invio Email BULK - Flex Trade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f7f5 0%, #e8f5e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(67, 176, 71, 0.12);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .navigation {
+            background: #2d5016;
+            padding: 15px 30px;
+            border-bottom: 3px solid #43b047;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: #43b047;
+            transform: translateY(-2px);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d5016;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #43b047;
+        }
+
+        .recipients-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .upload-area {
+            border: 2px dashed #43b047;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            background: #f0f8f0;
+            border-color: #2d5016;
+        }
+
+        .upload-area.dragover {
+            background: #e8f5e8;
+            border-color: #2d5016;
+            transform: scale(1.02);
+        }
+
+        .recipients-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .recipient-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .recipient-item:last-child {
+            border-bottom: none;
+        }
+
+        .recipient-info {
+            flex: 1;
+        }
+
+        .recipient-email {
+            font-weight: 600;
+            color: #2d5016;
+        }
+
+        .recipient-name {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .progress-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #43b047, #2d5016);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #43b047;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .log-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .log-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .log-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .log-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .template-preview {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            height: 600px;
+            overflow-y: auto;
+        }
+
+        .preview-email {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .variables-help {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .variables-help h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .variable-tag {
+            background: #43b047;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📧 Sistema Invio Email BULK</h1>
+            <p>Gestione avanzata per invii di massa - Flex Trade</p>
+        </header>
+
+        <nav class="navigation">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('recipients')">👥 Destinatari</button>
+                <button class="nav-tab" onclick="showTab('template')">📝 Template</button>
+                <button class="nav-tab" onclick="showTab('send')">🚀 Invio</button>
+                <button class="nav-tab" onclick="showTab('logs')">📊 Log</button>
+            </div>
+        </nav>
+
+        <div class="content">
+            <!-- TAB 1: GESTIONE DESTINATARI -->
+            <div id="recipients-tab" class="tab-content active">
+                <h2>👥 Gestione Destinatari</h2>
+                
+                <div class="recipients-section">
+                    <h3>📁 Importa da File CSV</h3>
+                    <div class="variables-help">
+                        <h4>📋 Formato CSV richiesto:</h4>
+                        <p><strong>Prima riga (intestazioni):</strong> email,nome,azienda,cognome</p>
+                        <p><strong>Esempio:</strong></p>
+                        <code>
+                            email,nome,azienda,cognome<br>
+                            mario.rossi@gmail.com,Mario,ACME Corp,Rossi<br>
+                            giulia.bianchi@yahoo.it,Giulia,Tech Solutions,Bianchi
+                        </code>
+                    </div>
+                    
+                    <div class="upload-area" id="csvUpload" onclick="document.getElementById('csvFile').click()">
+                        <input type="file" id="csvFile" accept=".csv" style="display: none;" onchange="handleCSVUpload(event)">
+                        <h3>📎 Clicca per selezionare file CSV</h3>
+                        <p>oppure trascina il file qui</p>
+                        <small>Formati supportati: .csv</small>
+                    </div>
+                </div>
+
+                <div class="recipients-section">
+                    <h3>➕ Aggiungi Manualmente</h3>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
+                        <div class="form-group">
+                            <label>📧 Email</label>
+                            <input type="email" id="manualEmail" placeholder="cliente@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>👤 Nome</label>
+                            <input type="text" id="manualName" placeholder="Mario">
+                        </div>
+                        <div class="form-group">
+                            <label>🏢 Azienda</label>
+                            <input type="text" id="manualCompany" placeholder="ACME Corp">
+                        </div>
+                        <button onclick="addManualRecipient()" style="height: 44px; background: #43b047; color: white; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer;">➕</button>
+                    </div>
+                </div>
+
+                <div class="recipients-section">
+                    <h3>📋 Lista Destinatari (<span id="recipientCount">0</span>)</h3>
+                    <div style="margin-bottom: 10px;">
+                        <button onclick="clearAllRecipients()" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">🗑️ Svuota Lista</button>
+                        <button onclick="exportRecipients()" style="background: #17a2b8; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; margin-left: 10px;">💾 Esporta CSV</button>
+                    </div>
+                    <div id="recipientsList" class="recipients-list">
+                        <div style="padding: 20px; text-align: center; color: #666;">
+                            Nessun destinatario aggiunto
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: TEMPLATE EMAIL -->
+            <div id="template-tab" class="tab-content">
+                <h2>📝 Template Email</h2>
+                
+                <div class="variables-help">
+                    <h4>🔧 Variabili Disponibili:</h4>
+                    <p>Usa queste variabili nel tuo template per personalizzare ogni email:</p>
+                    <span class="variable-tag">{{nome}}</span>
+                    <span class="variable-tag">{{email}}</span>
+                    <span class="variable-tag">{{azienda}}</span>
+                    <span class="variable-tag">{{cognome}}</span>
+                </div>
+
+                <div class="two-column">
+                    <div>
+                        <div class="form-group">
+                            <label>📋 Oggetto Email</label>
+                            <input type="text" id="bulkSubject" value="Offerta Speciale per {{nome}} - Flex Trade" placeholder="Oggetto dell'email">
+                        </div>
+
+                        <div class="form-group">
+                            <label>📄 Contenuto Email</label>
+                            <textarea id="bulkContent" rows="15" placeholder="Scrivi qui il contenuto dell'email">Gentile {{nome}},
+
+Spero che questa email ti trovi bene. Sono {{mittente}} di Flex Trade, specializzati in abbigliamento militare e tattico di alta qualità.
+
+{{#azienda}}Ho notato che lavori presso {{azienda}} e{{/azienda}} penso che i nostri prodotti potrebbero interessarti per:
+
+🎯 Uniformi militari professionali
+🎯 Attrezzature tattiche certificate
+🎯 Accessori militari originali
+🎯 Prezzi competitivi per professionisti
+
+Abbiamo una vasta selezione di prodotti utilizzati da forze dell'ordine, security e appassionati di militaria in tutto il mondo.
+
+Sarò felice di inviarti il nostro catalogo completo e discutere le tue esigenze specifiche.
+
+Cordiali saluti,
+{{mittente}}
+Flex Trade
+📧 Email: {{email_mittente}}
+🌐 www.flextrade.it</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>👨‍💼 Il tuo Nome</label>
+                            <input type="text" id="bulkSenderName" value="Marco Antonelli" placeholder="Il tuo nome">
+                        </div>
+
+                        <div class="form-group">
+                            <label>📧 La tua Email</label>
+                            <select id="bulkSenderEmail">
+                                <option value="info@flextrade.it">info@flextrade.it</option>
+                                <option value="commercial@flextrade.it">commercial@flextrade.it</option>
+                                <option value="contact@flextrade.it">contact@flextrade.it</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>👁️ Anteprima Email</h3>
+                        <div id="templatePreview" class="template-preview">
+                            <div class="preview-email">
+                                <p><strong>A:</strong> esempio@email.com</p>
+                                <p><strong>Oggetto:</strong> <span id="previewSubject">Oggetto dell'email</span></p>
+                                <hr>
+                                <div id="previewContent">Contenuto dell'email apparirà qui...</div>
+                            </div>
+                        </div>
+                        <button onclick="updatePreview()" style="background: #43b047; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 10px; width: 100%;">🔄 Aggiorna Anteprima</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: INVIO -->
+            <div id="send-tab" class="tab-content">
+                <h2>🚀 Invio Email BULK</h2>
+                
+                <div class="progress-section">
+                    <h3>📊 Stato Invio</h3>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill">
+                            <div id="progressText" class="progress-text">0%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div id="totalEmails" class="stat-number">0</div>
+                            <div class="stat-label">Totale Email</div>
+                        </div>
+                        <div class="stat-item">
+                            <div id="sentEmails" class="stat-number">0</div>
+                            <div class="stat-label">Inviate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div id="failedEmails" class="stat-number">0</div>
+                            <div class="stat-label">Fallite</div>
+                        </div>
+                        <div class="stat-item">
+                            <div id="remainingEmails" class="stat-number">0</div>
+                            <div class="stat-label">Rimanenti</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>⏱️ Intervallo tra invii (secondi)</label>
+                    <select id="sendInterval">
+                        <option value="1">1 secondo (Veloce)</option>
+                        <option value="2" selected>2 secondi (Consigliato)</option>
+                        <option value="3">3 secondi (Sicuro)</option>
+                        <option value="5">5 secondi (Molto Sicuro)</option>
+                    </select>
+                </div>
+
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin: 20px 0;">
+                    <h4 style="color: #856404; margin-bottom: 10px;">⚠️ Importante prima dell'invio:</h4>
+                    <ul style="color: #856404; margin-left: 20px;">
+                        <li>Verifica che tutti i destinatari siano corretti</li>
+                        <li>Controlla il template email nell'anteprima</li>
+                        <li>Assicurati che il server sia connesso</li>
+                        <li>Non chiudere questa pagina durante l'invio</li>
+                    </ul>
+                </div>
+
+                <button id="startSendBtn" onclick="startBulkSend()" class="send-btn">
+                    🚀 Inizia Invio BULK (<span id="emailCount">0</span> email)
+                </button>
+
+                <button id="stopSendBtn" onclick="stopBulkSend()" class="send-btn" style="background: #dc3545; display: none;">
+                    ⏹️ Ferma Invio
+                </button>
+            </div>
+
+            <!-- TAB 4: LOG -->
+            <div id="logs-tab" class="tab-content">
+                <h2>📊 Log degli Invii</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <button onclick="clearLogs()" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">🗑️ Pulisci Log</button>
+                    <button onclick="exportLogs()" style="background: #17a2b8; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; margin-left: 10px;">💾 Esporta Log</button>
+                </div>
+
+                <div id="logContainer" class="log-section">
+                    <div class="log-item log-info">
+                        📅 Log inizializzato - Sistema pronto per invii BULK
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stato globale dell'applicazione
+        let recipients = [];
+        let bulkSendActive = false;
+        let currentSendIndex = 0;
+        let sendStats = {
+            total: 0,
+            sent: 0,
+            failed: 0,
+            remaining: 0
+        };
+
+        // Gestione tab
+        function showTab(tabName) {
+            // Nascondi tutti i tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Rimuovi classe active da tutti i nav-tab
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostra il tab selezionato
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Aggiungi classe active al bottone corrispondente
+            event.target.classList.add('active');
+
+            // Aggiorna le statistiche se siamo nel tab invio
+            if (tabName === 'send') {
+                updateSendStats();
+            }
+        }
+
+        // Gestione drag & drop per CSV
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('csvUpload');
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].name.endsWith('.csv')) {
+                    handleCSVFile(files[0]);
+                }
+            });
+        }
+
+        // Upload CSV
+        function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                handleCSVFile(file);
+            } else {
+                alert('⚠️ Seleziona un file CSV valido');
+            }
+        }
+
+        function handleCSVFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                parseCSV(csv);
+            };
+            reader.readAsText(file);
+        }
+
+        function parseCSV(csv) {
+            try {
+                const lines = csv.split('\\n');
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                
+                // Verifica headers richiesti
+                const requiredHeaders = ['email'];
+                const hasRequiredHeaders = requiredHeaders.every(header => headers.includes(header));
+                
+                if (!hasRequiredHeaders) {
+                    alert('⚠️ Il file CSV deve contenere almeno la colonna "email"');
+                    return;
+                }
+                
+                let imported = 0;
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        const values = line.split(',').map(v => v.trim());
+                        const emailIndex = headers.indexOf('email');
+                        const nameIndex = headers.indexOf('nome');
+                        const companyIndex = headers.indexOf('azienda');
+                        const surnameIndex = headers.indexOf('cognome');
+                        
+                        const email = values[emailIndex];
+                        if (email && isValidEmail(email)) {
+                            const recipient = {
+                                email: email,
+                                name: nameIndex >= 0 ? values[nameIndex] || '' : '',
+                                company: companyIndex >= 0 ? values[companyIndex] || '' : '',
+                                surname: surnameIndex >= 0 ? values[surnameIndex] || '' : ''
+                            };
+                            
+                            // Evita duplicati
+                            if (!recipients.find(r => r.email === email)) {
+                                recipients.push(recipient);
+                                imported++;
+                            }
+                        }
+                    }
+                }
+                
+                updateRecipientsList();
+                addLog(`✅ Importati ${imported} destinatari da CSV`, 'success');
+                
+            } catch (error) {
+                addLog(`❌ Errore durante l'importazione CSV: ${error.message}`, 'error');
+            }
+        }
+
+        // Aggiungi destinatario manualmente
+        function addManualRecipient() {
+            const email = document.getElementById('manualEmail').value.trim();
+            const name = document.getElementById('manualName').value.trim();
+            const company = document.getElementById('manualCompany').value.trim();
+            
+            if (!email) {
+                alert('⚠️ Inserisci un indirizzo email');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                alert('⚠️ Inserisci un indirizzo email valido');
+                return;
+            }
+            
+            // Evita duplicati
+            if (recipients.find(r => r.email === email)) {
+                alert('⚠️ Questo indirizzo email è già presente nella lista');
+                return;
+            }
+            
+            recipients.push({
+                email: email,
+                name: name,
+                company: company,
+                surname: ''
+            });
+            
+            // Pulisci i campi
+            document.getElementById('manualEmail').value = '';
+            document.getElementById('manualName').value = '';
+            document.getElementById('manualCompany').value = '';
+            
+            updateRecipientsList();
+            addLog(`➕ Aggiunto destinatario: ${email}`, 'info');
+        }
+
+        // Aggiorna lista destinatari
+        function updateRecipientsList() {
+            const container = document.getElementById('recipientsList');
+            const countElement = document.getElementById('recipientCount');
+            
+            countElement.textContent = recipients.length;
+            
+            if (recipients.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Nessun destinatario aggiunto</div>';
+                return;
+            }
+            
+            const html = recipients.map((recipient, index) => `
+                <div class="recipient-item">
+                    <div class="recipient-info">
+                        <div class="recipient-email">${recipient.email}</div>
+                        <div class="recipient-name">${recipient.name} ${recipient.surname} ${recipient.company ? '(' + recipient.company + ')' : ''}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeRecipient(${index})">🗑️</button>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // Rimuovi destinatario
+        function removeRecipient(index) {
+            const removed = recipients.splice(index, 1)[0];
+            updateRecipientsList();
+            addLog(`🗑️ Rimosso destinatario: ${removed.email}`, 'info');
+        }
+
+        // Pulisci tutti i destinatari
+        function clearAllRecipients() {
+            if (recipients.length > 0 && confirm('⚠️ Sei sicuro di voler rimuovere tutti i destinatari?')) {
+                recipients = [];
+                updateRecipientsList();
+                addLog('🗑️ Lista destinatari svuotata', 'info');
+            }
+        }
+
+        // Esporta destinatari in CSV
+        function exportRecipients() {
+            if (recipients.length === 0) {
+                alert('⚠️ Nessun destinatario da esportare');
+                return;
+            }
+            
+            const csv = 'email,nome,azienda,cognome\\n' + 
+                recipients.map(r => `${r.email},${r.name},${r.company},${r.surname}`).join('\\n');
+            
+            downloadCSV(csv, 'destinatari_flextrade.csv');
+        }
+
+        // Aggiorna anteprima template
+        function updatePreview() {
+            const subject = document.getElementById('bulkSubject').value;
+            const content = document.getElementById('bulkContent').value;
+            const senderName = document.getElementById('bulkSenderName').value;
+            const senderEmail = document.getElementById('bulkSenderEmail').value;
+            
+            // Usa dati di esempio per l'anteprima
+            const sampleData = {
+                nome: 'Mario',
+                email: 'mario.rossi@example.com',
+                azienda: 'ACME Corp',
+                cognome: 'Rossi',
+                mittente: senderName,
+                email_mittente: senderEmail
+            };
+            
+            // Sostituisci le variabili
+            const processedSubject = replaceTemplateVariables(subject, sampleData);
+            const processedContent = replaceTemplateVariables(content, sampleData);
+            
+            document.getElementById('previewSubject').textContent = processedSubject;
+            document.getElementById('previewContent').innerHTML = processedContent.replace(/\\n/g, '<br>');
+        }
+
+        // Sostituisci variabili nel template
+        function replaceTemplateVariables(template, data) {
+            let result = template;
+            
+            // Sostituzioni semplici
+            Object.keys(data).forEach(key => {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                result = result.replace(regex, data[key] || '');
+            });
+            
+            // Gestione condizionale {{#azienda}}...{{/azienda}}
+            result = result.replace(/{{#azienda}}(.*?){{\/azienda}}/g, (match, content) => {
+                return data.azienda ? content.replace(/{{azienda}}/g, data.azienda) : '';
+            });
+            
+            return result;
+        }
+
+        // Aggiorna statistiche invio
+        function updateSendStats() {
+            sendStats.total = recipients.length;
+            sendStats.remaining = sendStats.total - sendStats.sent - sendStats.failed;
+            
+            document.getElementById('totalEmails').textContent = sendStats.total;
+            document.getElementById('sentEmails').textContent = sendStats.sent;
+            document.getElementById('failedEmails').textContent = sendStats.failed;
+            document.getElementById('remainingEmails').textContent = sendStats.remaining;
+            document.getElementById('emailCount').textContent = sendStats.total;
+        }
+
+        // Inizia invio BULK
+        async function startBulkSend() {
+            if (recipients.length === 0) {
+                alert('⚠️ Aggiungi almeno un destinatario prima di iniziare l\'invio');
+                return;
+            }
+            
+            const subject = document.getElementById('bulkSubject').value.trim();
+            const content = document.getElementById('bulkContent').value.trim();
+            
+            if (!subject || !content) {
+                alert('⚠️ Compila oggetto e contenuto dell\'email');
+                return;
+            }
+            
+            if (!confirm(`🚀 Sei sicuro di voler inviare ${recipients.length} email?`)) {
+                return;
+            }
+            
+            bulkSendActive = true;
+            currentSendIndex = 0;
+            sendStats = { total: recipients.length, sent: 0, failed: 0, remaining: recipients.length };
+            
+            document.getElementById('startSendBtn').style.display = 'none';
+            document.getElementById('stopSendBtn').style.display = 'block';
+            
+            addLog(`🚀 Iniziato invio BULK di ${recipients.length} email`, 'info');
+            
+            const interval = parseInt(document.getElementById('sendInterval').value) * 1000;
+            
+            for (let i = 0; i < recipients.length && bulkSendActive; i++) {
+                currentSendIndex = i;
+                await sendSingleEmail(recipients[i]);
+                updateProgress();
+                updateSendStats();
+                
+                if (i < recipients.length - 1 && bulkSendActive) {
+                    await sleep(interval);
+                }
+            }
+            
+            if (bulkSendActive) {
+                addLog(`✅ Invio BULK completato! Inviate: ${sendStats.sent}, Fallite: ${sendStats.failed}`, 'success');
+            } else {
+                addLog(`⏹️ Invio BULK interrotto dall'utente`, 'info');
+            }
+            
+            bulkSendActive = false;
+            document.getElementById('startSendBtn').style.display = 'block';
+            document.getElementById('stopSendBtn').style.display = 'none';
+        }
+
+        // Ferma invio BULK
+        function stopBulkSend() {
+            bulkSendActive = false;
+            addLog('⏹️ Richiesta interruzione invio BULK', 'info');
+        }
+
+        // Invia singola email
+        async function sendSingleEmail(recipient) {
+            try {
+                const subject = document.getElementById('bulkSubject').value;
+                const content = document.getElementById('bulkContent').value;
+                const senderName = document.getElementById('bulkSenderName').value;
+                const senderEmail = document.getElementById('bulkSenderEmail').value;
+                
+                const templateData = {
+                    nome: recipient.name,
+                    email: recipient.email,
+                    azienda: recipient.company,
+                    cognome: recipient.surname,
+                    mittente: senderName,
+                    email_mittente: senderEmail
+                };
+                
+                const processedSubject = replaceTemplateVariables(subject, templateData);
+                const processedContent = replaceTemplateVariables(content, templateData);
+                
+                const emailData = {
+                    to: recipient.email,
+                    subject: processedSubject,
+                    text: processedContent,
+                    from: senderEmail,
+                    fromName: senderName
+                };
+                
+                const response = await fetch('/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailData)
+                });
+                
+                if (response.ok) {
+                    sendStats.sent++;
+                    addLog(`✅ Email inviata a: ${recipient.email}`, 'success');
+                } else {
+                    const error = await response.text();
+                    sendStats.failed++;
+                    addLog(`❌ Errore invio a ${recipient.email}: ${error}`, 'error');
+                }
+                
+            } catch (error) {
+                sendStats.failed++;
+                addLog(`❌ Errore invio a ${recipient.email}: ${error.message}`, 'error');
+            }
+        }
+
+        // Aggiorna barra di progresso
+        function updateProgress() {
+            const progress = ((currentSendIndex + 1) / recipients.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        // Utility functions
+        function isValidEmail(email) {
+            const re = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+            return re.test(email);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            const logItem = document.createElement('div');
+            logItem.className = `log-item log-${type}`;
+            logItem.innerHTML = `[${timestamp}] ${message}`;
+            logContainer.appendChild(logItem);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLogs() {
+            if (confirm('⚠️ Sei sicuro di voler cancellare tutti i log?')) {
+                document.getElementById('logContainer').innerHTML = '';
+                addLog('📅 Log puliti - Sistema pronto', 'info');
+            }
+        }
+
+        function exportLogs() {
+            const logs = document.querySelectorAll('.log-item');
+            if (logs.length === 0) {
+                alert('⚠️ Nessun log da esportare');
+                return;
+            }
+            
+            const logText = Array.from(logs).map(log => log.textContent).join('\\n');
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `log_email_bulk_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragAndDrop();
+            updateRecipientsList();
+            updateSendStats();
+            updatePreview();
+            
+            // Auto-aggiorna anteprima quando cambiano i campi
+            ['bulkSubject', 'bulkContent', 'bulkSenderName', 'bulkSenderEmail'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+                document.getElementById(id).addEventListener('change', updatePreview);
+            });
+        });
+    </script>
+</body>
+</html>

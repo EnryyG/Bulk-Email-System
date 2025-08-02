@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Template Email - Flex Trade (SISTEMA FINAL)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f7f5 0%, #e8f5e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(67, 176, 71, 0.12);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .server-status {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .server-online {
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+        }
+
+        .server-offline {
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+        }
+
+        .quick-actions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quick-actions h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .quick-actions button {
+            background: #ffc107;
+            border: none;
+            color: #212529;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .setup-notice {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            color: #2d3436;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 12px;
+            border-left: 6px solid #e17055;
+        }
+
+        .setup-notice h3 {
+            margin-bottom: 10px;
+            color: #d63031;
+        }
+
+        .setup-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .setup-steps li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .setup-steps li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00b894;
+            font-weight: bold;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 80vh;
+        }
+
+        .editor-panel {
+            padding: 40px;
+            background: #fafafa;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .preview-panel {
+            padding: 40px;
+            background: white;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3436;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #43b047;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(67, 176, 71, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #2d3436;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e8f5e8;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        hr::after {
+            content: "📧 INVIO DIRETTO";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fafafa;
+            padding: 0 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #43b047;
+            letter-spacing: 1px;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-loading {
+            background: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #43b047;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .preview-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .preview-title {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+            color: #2d3436;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+        }
+
+        .email-preview {
+            transform: scale(0.7);
+            transform-origin: top left;
+            width: 142.857%;
+            height: auto;
+        }
+
+        .instructions {
+            background: #e8f5e8;
+            border-left: 4px solid #43b047;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .instructions h3 {
+            color: #2d5016;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .editor-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .email-preview {
+                transform: scale(1);
+                width: 100%;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .code-output {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div id="serverStatus" class="server-status server-offline">🔴 Controllo...</div>
+            <h1>📧 Editor Template Email</h1>
+            <p>Sistema finale - Zero configurazione richiesta!</p>
+            <div style="margin-top: 15px;">
+                <button id="singleMode" onclick="switchMode('single')" style="background: #43b047; color: white; padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; margin-right: 10px;">
+                   📧 INVIO SINGOLO
+                </button>
+                <button id="bulkMode" onclick="switchMode('bulk')" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">
+                   📤 INVIO BULK
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="editor-panel">
+                <div class="instructions">
+                    <h3>📝 Sistema Pronto all'Uso</h3>
+                    <p><strong>ZERO configurazione richiesta!</strong> Compila i campi, clicca "Invia Email" e il sistema farà tutto automaticamente. Le email vengono inviate dal server aziendale.</p>
+                </div>
+
+                <div class="quick-actions">
+                    <h4>⚡ Azioni Rapide</h4>
+                    <button onclick="fillTestData()">� Dati Test</button>
+                    <button onclick="checkServer()">🔧 Test Server</button>
+                    <button onclick="clearAll()">🗑️ Pulisci Tutto</button>
+                </div>
+
+                <div id="statusMessage" class="status-message"></div>
+
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="badge">🏷️ Badge Header</label>
+                        <input type="text" id="badge" value="Nouvelle Collection Militaire" placeholder="es: Offre Spéciale">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mainContent">📄 Contenuto Principale</label>
+                        <textarea id="mainContent" placeholder="Descrivi qui il prodotto o servizio che vuoi promuovere">Nous sommes heureux de vous annoncer que nous venons de recevoir un nouveau stock de vêtements militaires. Nous avons une large sélection de vêtements de haute qualité, allant des uniformes complets aux accessoires tels que des sacs à dos, des casquettes et des gants.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="highlightContent">⭐ Contenuto Evidenziato</label>
+                        <textarea id="highlightContent" placeholder="Call-to-action o informazioni importanti">Si vous êtes intéressé par notre nouvelle collection, n'hésitez pas à nous contacter par e-mail. Nous serons ravis de répondre à vos questions et de vous fournir toutes les informations dont vous avez besoin.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalDetails">📋 Dettagli Aggiuntivi</label>
+                        <textarea id="additionalDetails" placeholder="Informazioni supplementari">Nos produits sont conçus pour les professionnels et les amateurs de militaria, et sont disponibles à des prix compétitifs.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conclusion">🎯 Conclusione</label>
+                        <textarea id="conclusion" placeholder="Messaggio di chiusura">Nous espérons que vous trouverez ce que vous cherchez et que vous apprécierez nos produits.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ctaText">🔘 Testo Bottone</label>
+                        <input type="text" id="ctaText" value="Contactez-nous" placeholder="es: Demander Info">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailContact">📧 Email di Contatto</label>
+                        <select id="emailContact">
+                            <option value="info">info@flextrade.it</option>
+                            <option value="contact">contact@flextrade.it</option>
+                            <option value="commercial">commercial@flextrade.it</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailSubject">📋 Oggetto Email</label>
+                        <input type="text" id="emailSubject" value="Demande d'information - Vêtements militaires" placeholder="Oggetto dell'email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signature">✍️ Firma</label>
+                        <input type="text" id="signature" value="L'équipe FLEX TRADE" placeholder="es: Mario Rossi - FLEX TRADE">
+                    </div>
+
+                    <hr>
+
+                    <div class="form-group">
+                        <label for="recipientEmail">👤 Email Destinatario</label>
+                        <input type="email" id="recipientEmail" placeholder="cliente@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipientName">📝 Nome Destinatario (opzionale)</label>
+                        <input type="text" id="recipientName" placeholder="Nome del cliente">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderName">👨‍💼 Il tuo Nome</label>
+                        <input type="text" id="senderName" placeholder="Il tuo nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderEmail">📧 La tua Email</label>
+                        <select id="senderEmail" required>
+                            <option value="">Seleziona la tua email</option>
+                            <option value="info@flextrade.it">info@flextrade.it</option>
+                            <option value="contact@flextrade.it">contact@flextrade.it</option>
+                            <option value="commercial@flextrade.it">commercial@flextrade.it</option>
+                            <option value="admin@flextrade.it">admin@flextrade.it</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" id="sendBtn" onclick="sendEmail()">📤 Invia Email</button>
+                        <button type="button" class="btn btn-secondary" onclick="generateEmail()">🔧 Genera Codice</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Reset</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="preview-panel">
+                <div class="preview-container">
+                    <div class="preview-title">📱 Anteprima Email</div>
+                    <div id="emailPreview" class="email-preview">
+                        <!-- L'anteprima verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEZIONE BULK EMAIL -->
+        <div id="bulkSection" class="content" style="display: none;">
+            <div class="editor-panel">
+                <div class="instructions">
+                    <h3>📤 Invio Email in Massa (BULK)</h3>
+                    <p><strong>Gestisci invii multipli!</strong> Importa liste di destinatari da CSV e invia email personalizzate con un solo click.</p>
+                </div>
+
+                <!-- Gestione destinatari -->
+                <div class="recipients-section" style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <h4>👥 Gestione Destinatari</h4>
+                    
+                    <!-- Upload CSV -->
+                    <div style="margin-bottom: 20px;">
+                        <h5>📁 Importa da File CSV</h5>
+                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                            <p><strong>Formato CSV richiesto:</strong></p>
+                            <code>email,nome,azienda,cognome</code><br>
+                            <small>Esempio: mario@gmail.com,Mario,ACME,Rossi</small>
+                        </div>
+                        <input type="file" id="csvFile" accept=".csv" onchange="handleCSVUpload(event)" style="margin-bottom: 10px;">
+                        <button onclick="document.getElementById('csvFile').click()" style="background: #43b047; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">
+                            📎 Seleziona File CSV
+                        </button>
+                    </div>
+
+                    <!-- Aggiungi manualmente -->
+                    <div style="margin-bottom: 20px;">
+                        <h5>➕ Aggiungi Manualmente</h5>
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
+                            <input type="email" id="manualEmail" placeholder="cliente@example.com" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            <input type="text" id="manualName" placeholder="Nome" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            <input type="text" id="manualCompany" placeholder="Azienda" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            <button onclick="addManualRecipient()" style="background: #43b047; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">➕</button>
+                        </div>
+                    </div>
+
+                    <!-- Lista destinatari -->
+                    <div>
+                        <h5>📋 Lista Destinatari (<span id="recipientCount">0</span>)</h5>
+                        <div style="margin-bottom: 10px;">
+                            <button onclick="clearAllRecipients()" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">🗑️ Svuota</button>
+                        </div>
+                        <div id="recipientsList" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; background: white;">
+                            <div style="padding: 15px; text-align: center; color: #666;">Nessun destinatario aggiunto</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template BULK -->
+                <form id="bulkEmailForm">
+                    <div class="form-group">
+                        <label for="bulkSubject">📋 Oggetto Email (usa {{nome}}, {{azienda}}, etc.)</label>
+                        <input type="text" id="bulkSubject" value="Offerta Speciale per {{nome}} - Flex Trade" placeholder="Oggetto personalizzabile">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bulkContent">📄 Contenuto Email</label>
+                        <textarea id="bulkContent" rows="10" placeholder="Usa {{nome}}, {{azienda}}, {{cognome}} per personalizzare">Gentile {{nome}},
+
+Spero che questa email ti trovi bene. Sono {{mittente}} di Flex Trade, specializzati in abbigliamento militare e tattico di alta qualità.
+
+{{#azienda}}Ho notato che lavori presso {{azienda}} e {{/azienda}}penso che i nostri prodotti potrebbero interessarti per:
+
+🎯 Uniformi militari professionali
+🎯 Attrezzature tattiche certificate  
+🎯 Accessori militari originali
+🎯 Prezzi competitivi per professionisti
+
+Sarò felice di inviarti il nostro catalogo completo e discutere le tue esigenze specifiche.
+
+Cordiali saluti,
+{{mittente}}
+Flex Trade
+📧 {{email_mittente}}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bulkSenderName">👨‍💼 Il tuo Nome</label>
+                        <input type="text" id="bulkSenderName" value="Marco Antonelli" placeholder="Il tuo nome">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bulkSenderEmail">📧 La tua Email</label>
+                        <select id="bulkSenderEmail">
+                            <option value="info@flextrade.it">info@flextrade.it</option>
+                            <option value="commercial@flextrade.it">commercial@flextrade.it</option>
+                            <option value="contact@flextrade.it">contact@flextrade.it</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendInterval">⏱️ Intervallo tra invii</label>
+                        <select id="sendInterval">
+                            <option value="1">1 secondo (Veloce)</option>
+                            <option value="2" selected>2 secondi (Consigliato)</option>
+                            <option value="3">3 secondi (Sicuro)</option>
+                            <option value="5">5 secondi (Molto Sicuro)</option>
+                        </select>
+                    </div>
+
+                    <!-- Progress BULK -->
+                    <div id="bulkProgress" style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin: 20px 0; display: none;">
+                        <h5>📊 Progresso Invio</h5>
+                        <div style="background: #e0e0e0; border-radius: 8px; height: 16px; margin: 10px 0;">
+                            <div id="progressBar" style="background: linear-gradient(90deg, #43b047, #2d5016); height: 100%; width: 0%; border-radius: 8px; transition: width 0.3s ease;"></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px;">
+                            <div style="text-align: center; background: white; padding: 8px; border-radius: 4px;">
+                                <div id="totalEmails" style="font-size: 20px; font-weight: bold; color: #43b047;">0</div>
+                                <div style="font-size: 12px; color: #666;">Totale</div>
+                            </div>
+                            <div style="text-align: center; background: white; padding: 8px; border-radius: 4px;">
+                                <div id="sentEmails" style="font-size: 20px; font-weight: bold; color: #28a745;">0</div>
+                                <div style="font-size: 12px; color: #666;">Inviate</div>
+                            </div>
+                            <div style="text-align: center; background: white; padding: 8px; border-radius: 4px;">
+                                <div id="failedEmails" style="font-size: 20px; font-weight: bold; color: #dc3545;">0</div>
+                                <div style="font-size: 12px; color: #666;">Fallite</div>
+                            </div>
+                            <div style="text-align: center; background: white; padding: 8px; border-radius: 4px;">
+                                <div id="remainingEmails" style="font-size: 20px; font-weight: bold; color: #17a2b8;">0</div>
+                                <div style="font-size: 12px; color: #666;">Rimanenti</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" id="startBulkBtn" onclick="startBulkSend()" class="btn btn-primary">🚀 Inizia Invio BULK (<span id="emailCount">0</span> email)</button>
+                        <button type="button" id="stopBulkBtn" onclick="stopBulkSend()" class="btn btn-secondary" style="display: none;">⏹️ Ferma Invio</button>
+                        <button type="button" onclick="previewBulkEmail()" class="btn btn-secondary">👁️ Anteprima</button>
+                    </div>
+                </form>
+
+                <!-- Log BULK -->
+                <div id="bulkLogs" style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-top: 20px; max-height: 300px; overflow-y: auto; display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h5>📊 Log degli Invii</h5>
+                        <button onclick="clearBulkLogs()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;">Pulisci</button>
+                    </div>
+                    <div id="logContainer"></div>
+                </div>
+            </div>
+
+            <div class="preview-panel">
+                <div class="preview-container">
+                    <div class="preview-title">👁️ Anteprima BULK</div>
+                    <div id="bulkPreview" class="email-preview">
+                        <p>Seleziona "👁️ Anteprima" per vedere come apparirà l'email</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per il codice generato -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <h3>📧 Codice Email Generato</h3>
+            <p>Copia tutto il codice qui sotto e incollalo in Gmail usando il pulsante HTML (<code>&lt;&gt;</code>):</p>
+            <div id="generatedCode" class="code-output"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="copyCode()">📋 Copia Codice</button>
+                <button class="btn btn-secondary" onclick="closeModal()">❌ Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variabili globali
+        let serverOnline = false;
+
+        // Template HTML base
+        const emailTemplate = `<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+  <title>Flex Trade - Email Template</title>
+  <style>
+    * { box-sizing: border-box; }
+    body, table, td, p, div, span, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    img { -ms-interpolation-mode: bicubic; border: 0; display: block; outline: none; text-decoration: none; }
+    
+    body {
+      background-color: #f4f7f5 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .email-wrapper {
+      background-color: #f4f7f5;
+      padding: 20px 0;
+    }
+    
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(67, 176, 71, 0.12);
+      border: 1px solid #e8f5e8;
+    }
+    
+    .header-section {
+      background: linear-gradient(135deg, #2d5016 0%, #43b047 50%, #5cb85c 100%);
+      padding: 40px 30px 30px 30px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .logo-container {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .logo-flex {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 48px;
+      color: #ffffff;
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      margin-bottom: 8px;
+    }
+    
+    .logo-trade {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      color: #d9ead3;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+    }
+    
+    .badge-military {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .content-section {
+      padding: 50px 40px;
+      background-color: #ffffff;
+    }
+    
+    .content-text {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #2d3436;
+      margin-bottom: 30px;
+    }
+    
+    .highlight-box {
+      background: linear-gradient(135deg, #f8fffe 0%, #e8f5e8 100%);
+      border-left: 6px solid #43b047;
+      padding: 25px 30px;
+      margin: 30px 0;
+      border-radius: 0 12px 12px 0;
+      box-shadow: 0 4px 20px rgba(67, 176, 71, 0.08);
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+      color: #ffffff !important;
+      text-decoration: none !important;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 16px 40px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 6px 20px rgba(67, 176, 71, 0.3);
+      transition: all 0.3s ease;
+      border: none;
+      margin: 20px 0;
+    }
+    
+    .partners-section {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fffe 100%);
+      padding: 40px 30px;
+      text-align: center;
+      border-top: 1px solid #e8f5e8;
+    }
+    
+    .partners-title {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #636e72;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+    }
+    
+    .partners-grid {
+      display: table;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    
+    .partner-cell {
+      display: table-cell;
+      width: 25%;
+      vertical-align: middle;
+      text-align: center;
+      padding: 10px;
+    }
+    
+    .partner-logo {
+      max-width: 100px;
+      max-height: 50px;
+      opacity: 0.7;
+      filter: grayscale(100%);
+    }
+    
+    .footer-link {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      color: #636e72;
+    }
+    
+    .footer-link a {
+      color: #43b047;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .signature {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      color: #2d3436;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+    
+    @media only screen and (max-width: 600px) {
+      .email-container { margin: 10px !important; border-radius: 12px !important; }
+      .header-section { padding: 30px 20px 25px 20px !important; }
+      .logo-flex { font-size: 36px !important; }
+      .logo-trade { font-size: 16px !important; }
+      .badge-military { font-size: 11px !important; padding: 8px 15px !important; }
+      .content-section { padding: 30px 25px !important; }
+      .content-text { font-size: 15px !important; }
+      .highlight-box { padding: 20px !important; margin: 20px 0 !important; }
+      .cta-button { padding: 14px 30px !important; font-size: 15px !important; }
+      .partners-section { padding: 30px 20px !important; }
+      .partner-cell { display: block !important; width: 100% !important; margin-bottom: 15px !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse: collapse;">
+      <tr>
+        <td align="center" style="padding: 0;">
+          <div class="email-container">
+            <div class="header-section">
+              <div class="logo-container">
+                <div class="logo-flex">FLEX</div>
+                <div class="logo-trade">TRADE</div>
+                <div class="badge-military">{{BADGE}}</div>
+              </div>
+            </div>
+            
+            <div class="content-section">
+              <div class="content-text">
+                <strong>Bonjour {{RECIPIENT_NAME}},</strong>
+              </div>
+              
+              <div class="content-text">
+                {{MAIN_CONTENT}}
+              </div>
+              
+              <div class="highlight-box">
+                <div class="content-text" style="margin-bottom: 0;">
+                  {{HIGHLIGHT_CONTENT}}
+                </div>
+              </div>
+              
+              <div class="content-text">
+                {{ADDITIONAL_DETAILS}}
+              </div>
+              
+              <div class="content-text">
+                {{CONCLUSION}}
+              </div>
+              
+              <div style="text-align: center; margin: 40px 0;">
+                <a href="mailto:{{EMAIL_CONTACT}}@flextrade.it?subject={{EMAIL_SUBJECT}}" class="cta-button">{{CTA_TEXT}}</a>
+              </div>
+              
+              <div class="signature">
+                Cordialement,<br>
+                <strong>{{SIGNATURE}}</strong>
+              </div>
+            </div>
+            
+            <div class="partners-section">
+              <div class="partners-title">Nos Partenaires de Confiance</div>
+              
+              <div class="partners-grid">
+                <div class="partner-cell">
+                  <img src="https://www.ivecodefencevehicles.com/themes/custom/iveco_defence/logo.png" alt="IVECO Defence" class="partner-logo">
+                </div>
+                <div class="partner-cell">
+                  <img src="https://www.coelmo.it/wp-content/uploads/2021/03/logo-coelmo.png" alt="COELMO" class="partner-logo">
+                </div>
+                <div class="partner-cell">
+                  <img src="https://www.hytera.com/themes/hytera/images/logo.png" alt="Hytera" class="partner-logo">
+                </div>
+                <div class="partner-cell">
+                  <img src="https://www.eaglesecurity.it/wp-content/uploads/2021/03/logo-eagle.png" alt="Eagle Security" class="partner-logo">
+                </div>
+              </div>
+              
+              <div class="footer-link">
+                Découvrez notre site web en <a href="https://flextrade.it" target="_blank">cliquant ici</a>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>`;
+
+        // Funzione per controllare lo stato del server
+        async function checkServer() {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                
+                if (data.success) {
+                    serverOnline = true;
+                    updateServerStatus(true);
+                    showStatus('success', '✅ Server email online e funzionante!');
+                } else {
+                    throw new Error('Server non risponde correttamente');
+                }
+            } catch (error) {
+                serverOnline = false;
+                updateServerStatus(false);
+                showStatus('error', '❌ Server offline! Avvia il server con: npm start');
+            }
+        }
+
+        // Aggiorna l'indicatore di stato del server
+        function updateServerStatus(online) {
+            const statusEl = document.getElementById('serverStatus');
+            if (online) {
+                statusEl.className = 'server-status server-online';
+                statusEl.textContent = '🟢 Online';
+            } else {
+                statusEl.className = 'server-status server-offline';
+                statusEl.textContent = '🔴 Offline';
+            }
+        }
+
+        // Funzione principale per inviare email
+        async function sendEmail() {
+            // Validazione campi
+            const recipientEmail = document.getElementById('recipientEmail').value;
+            const senderName = document.getElementById('senderName').value;
+            const senderEmail = document.getElementById('senderEmail').value;
+            const emailSubject = document.getElementById('emailSubject').value;
+
+            if (!recipientEmail || !senderName || !senderEmail) {
+                showStatus('error', '❌ Compila tutti i campi obbligatori!');
+                return;
+            }
+
+            if (!isValidEmail(recipientEmail)) {
+                showStatus('error', '❌ Inserisci un indirizzo email valido!');
+                return;
+            }
+
+            // Controlla se il server è online
+            if (!serverOnline) {
+                showStatus('error', '❌ Server offline! Clicca "Test Server" o avvia il server.');
+                return;
+            }
+
+            // Mostra loading
+            showStatus('loading', '<span class="loading-spinner"></span>Invio email in corso...');
+            document.getElementById('sendBtn').disabled = true;
+
+            try {
+                // Genera l'HTML dell'email
+                updatePreview();
+                
+                // Prepara i dati per l'invio
+                const emailData = {
+                    to: recipientEmail,
+                    from: senderEmail,
+                    fromName: senderName,
+                    subject: emailSubject,
+                    html: document.getElementById('emailPreview').innerHTML,
+                    recipientName: document.getElementById('recipientName').value || 'Client'
+                };
+
+                // Invia al server Node.js
+                const response = await fetch('/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showStatus('success', `✅ ${result.message}`);
+                } else {
+                    throw new Error(result.message);
+                }
+
+            } catch (error) {
+                showStatus('error', `❌ Errore: ${error.message}`);
+                console.error('Errore invio email:', error);
+            } finally {
+                document.getElementById('sendBtn').disabled = false;
+            }
+        }
+
+        // Funzioni di utilità
+        function fillTestData() {
+            document.getElementById('recipientEmail').value = 'swede.exe@gmail.com';
+            document.getElementById('recipientName').value = 'Test User';
+            document.getElementById('senderName').value = 'Mario Rossi';
+            document.getElementById('senderEmail').value = 'info@flextrade.it';
+            showStatus('success', '📝 Dati di test inseriti!');
+        }
+
+        function clearAll() {
+            if (confirm('Vuoi davvero cancellare tutti i campi?')) {
+                document.getElementById('emailForm').reset();
+                updatePreview();
+                showStatus('success', '🗑️ Tutti i campi sono stati cancellati!');
+            }
+        }
+
+        function showStatus(type, message) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.className = `status-message status-${type}`;
+            statusEl.innerHTML = message;
+            statusEl.style.display = 'block';
+
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 6000);
+            }
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function updatePreview() {
+            const badge = document.getElementById('badge').value;
+            const mainContent = document.getElementById('mainContent').value;
+            const highlightContent = document.getElementById('highlightContent').value;
+            const additionalDetails = document.getElementById('additionalDetails').value;
+            const conclusion = document.getElementById('conclusion').value;
+            const ctaText = document.getElementById('ctaText').value;
+            const emailContact = document.getElementById('emailContact').value;
+            const emailSubject = encodeURIComponent(document.getElementById('emailSubject').value);
+            const signature = document.getElementById('signature').value;
+            const recipientName = document.getElementById('recipientName').value || 'Client';
+
+            let preview = emailTemplate
+                .replace('{{BADGE}}', badge)
+                .replace('{{MAIN_CONTENT}}', mainContent)
+                .replace('{{HIGHLIGHT_CONTENT}}', highlightContent)
+                .replace('{{ADDITIONAL_DETAILS}}', additionalDetails)
+                .replace('{{CONCLUSION}}', conclusion)
+                .replace('{{CTA_TEXT}}', ctaText)
+                .replace('{{EMAIL_CONTACT}}', emailContact)
+                .replace('{{EMAIL_SUBJECT}}', emailSubject)
+                .replace('{{SIGNATURE}}', signature)
+                .replace('{{RECIPIENT_NAME}}', recipientName);
+
+            document.getElementById('emailPreview').innerHTML = preview;
+        }
+
+        function generateEmail() {
+            updatePreview();
+            document.getElementById('generatedCode').textContent = document.getElementById('emailPreview').innerHTML;
+            document.getElementById('codeModal').style.display = 'block';
+        }
+
+        function copyCode() {
+            const code = document.getElementById('generatedCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Codice copiato! Ora puoi incollarlo in Gmail.');
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('codeModal').style.display = 'none';
+        }
+
+        function resetForm() {
+            if (confirm('Sei sicuro di voler resettare tutti i campi?')) {
+                document.getElementById('emailForm').reset();
+                document.getElementById('badge').value = 'Nouvelle Collection Militaire';
+                document.getElementById('mainContent').value = 'Nous sommes heureux de vous annoncer que nous venons de recevoir un nouveau stock de vêtements militaires. Nous avons une large sélection de vêtements de haute qualité, allant des uniformes complets aux accessoires tels que des sacs à dos, des casquettes et des gants.';
+                document.getElementById('highlightContent').value = 'Si vous êtes intéressé par notre nouvelle collection, n\'hésitez pas à nous contacter par e-mail. Nous serons ravis de répondre à vos questions et de vous fournir toutes les informations dont vous avez besoin.';
+                document.getElementById('additionalDetails').value = 'Nos produits sont conçus pour les professionnels et les amateurs de militaria, et sont disponibles à des prix compétitifs.';
+                document.getElementById('conclusion').value = 'Nous espérons que vous trouverez ce que vous cherchez et que vous apprécierez nos produits.';
+                document.getElementById('ctaText').value = 'Contactez-nous';
+                document.getElementById('emailSubject').value = 'Demande d\'information - Vêtements militaires';
+                document.getElementById('signature').value = 'L\'équipe FLEX TRADE';
+                
+                updatePreview();
+                showStatus('success', '✅ Modulo resettato ai valori di default!');
+            }
+        }
+
+        // ========== FUNZIONI BULK EMAIL ==========
+        
+        // Variabili globali per BULK
+        let recipients = [];
+        let bulkSendActive = false;
+        let currentSendIndex = 0;
+        let sendStats = { total: 0, sent: 0, failed: 0, remaining: 0 };
+
+        // Cambia modalità tra singola e bulk
+        function switchMode(mode) {
+            const singleSection = document.querySelector('.content');
+            const bulkSection = document.getElementById('bulkSection');
+            const singleBtn = document.getElementById('singleMode');
+            const bulkBtn = document.getElementById('bulkMode');
+
+            if (mode === 'single') {
+                singleSection.style.display = 'block';
+                bulkSection.style.display = 'none';
+                singleBtn.style.background = '#43b047';
+                bulkBtn.style.background = 'rgba(255,255,255,0.2)';
+                showStatus('success', '📧 Modalità invio singolo attivata');
+            } else {
+                singleSection.style.display = 'none';
+                bulkSection.style.display = 'block';
+                bulkBtn.style.background = '#43b047';
+                singleBtn.style.background = 'rgba(255,255,255,0.2)';
+                showStatus('success', '📤 Modalità invio BULK attivata');
+                updateBulkStats();
+            }
+        }
+
+        // Gestione upload CSV
+        function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    parseCSV(e.target.result);
+                };
+                reader.readAsText(file);
+            } else {
+                showStatus('error', '⚠️ Seleziona un file CSV valido');
+            }
+        }
+
+        function parseCSV(csv) {
+            try {
+                const lines = csv.split('\n');
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                
+                if (!headers.includes('email')) {
+                    showStatus('error', '⚠️ Il file CSV deve contenere almeno la colonna "email"');
+                    return;
+                }
+                
+                let imported = 0;
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        const values = line.split(',').map(v => v.trim());
+                        const emailIndex = headers.indexOf('email');
+                        const email = values[emailIndex];
+                        
+                        if (email && isValidEmail(email)) {
+                            const recipient = {
+                                email: email,
+                                name: headers.includes('nome') ? values[headers.indexOf('nome')] || '' : '',
+                                company: headers.includes('azienda') ? values[headers.indexOf('azienda')] || '' : '',
+                                surname: headers.includes('cognome') ? values[headers.indexOf('cognome')] || '' : ''
+                            };
+                            
+                            if (!recipients.find(r => r.email === email)) {
+                                recipients.push(recipient);
+                                imported++;
+                            }
+                        }
+                    }
+                }
+                
+                updateRecipientsList();
+                showStatus('success', `✅ Importati ${imported} destinatari da CSV`);
+                addBulkLog(`📁 Importati ${imported} destinatari da CSV`);
+                
+            } catch (error) {
+                showStatus('error', `❌ Errore durante l'importazione CSV: ${error.message}`);
+            }
+        }
+
+        // Aggiungi destinatario manualmente
+        function addManualRecipient() {
+            const email = document.getElementById('manualEmail').value.trim();
+            const name = document.getElementById('manualName').value.trim();
+            const company = document.getElementById('manualCompany').value.trim();
+            
+            if (!email) {
+                showStatus('error', '⚠️ Inserisci un indirizzo email');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showStatus('error', '⚠️ Inserisci un indirizzo email valido');
+                return;
+            }
+            
+            if (recipients.find(r => r.email === email)) {
+                showStatus('error', '⚠️ Questo indirizzo email è già presente nella lista');
+                return;
+            }
+            
+            recipients.push({ email, name, company, surname: '' });
+            
+            document.getElementById('manualEmail').value = '';
+            document.getElementById('manualName').value = '';
+            document.getElementById('manualCompany').value = '';
+            
+            updateRecipientsList();
+            showStatus('success', `➕ Aggiunto destinatario: ${email}`);
+            addBulkLog(`➕ Aggiunto destinatario: ${email}`);
+        }
+
+        // Aggiorna lista destinatari
+        function updateRecipientsList() {
+            const container = document.getElementById('recipientsList');
+            const countElement = document.getElementById('recipientCount');
+            
+            countElement.textContent = recipients.length;
+            
+            if (recipients.length === 0) {
+                container.innerHTML = '<div style="padding: 15px; text-align: center; color: #666;">Nessun destinatario aggiunto</div>';
+                return;
+            }
+            
+            const html = recipients.map((recipient, index) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f0f0f0;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: #2d5016; font-size: 14px;">${recipient.email}</div>
+                        <div style="font-size: 12px; color: #666;">${recipient.name} ${recipient.surname} ${recipient.company ? '(' + recipient.company + ')' : ''}</div>
+                    </div>
+                    <button onclick="removeRecipient(${index})" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;">🗑️</button>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+            updateBulkStats();
+        }
+
+        function removeRecipient(index) {
+            const removed = recipients.splice(index, 1)[0];
+            updateRecipientsList();
+            showStatus('success', `🗑️ Rimosso destinatario: ${removed.email}`);
+            addBulkLog(`🗑️ Rimosso destinatario: ${removed.email}`);
+        }
+
+        function clearAllRecipients() {
+            if (recipients.length > 0 && confirm('⚠️ Sei sicuro di voler rimuovere tutti i destinatari?')) {
+                recipients = [];
+                updateRecipientsList();
+                showStatus('success', '🗑️ Lista destinatari svuotata');
+                addBulkLog('🗑️ Lista destinatari svuotata');
+            }
+        }
+
+        // Anteprima email BULK
+        function previewBulkEmail() {
+            const subject = document.getElementById('bulkSubject').value;
+            const content = document.getElementById('bulkContent').value;
+            const senderName = document.getElementById('bulkSenderName').value;
+            const senderEmail = document.getElementById('bulkSenderEmail').value;
+            
+            const sampleData = {
+                nome: 'Mario',
+                email: 'mario.rossi@example.com',
+                azienda: 'ACME Corp',
+                cognome: 'Rossi',
+                mittente: senderName,
+                email_mittente: senderEmail
+            };
+            
+            const processedSubject = replaceTemplateVariables(subject, sampleData);
+            const processedContent = replaceTemplateVariables(content, sampleData);
+            
+            document.getElementById('bulkPreview').innerHTML = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+                    <p><strong>A:</strong> ${sampleData.email}</p>
+                    <p><strong>Oggetto:</strong> ${processedSubject}</p>
+                    <hr style="margin: 15px 0;">
+                    <div style="white-space: pre-line; line-height: 1.6;">${processedContent}</div>
+                </div>
+            `;
+        }
+
+        function replaceTemplateVariables(template, data) {
+            let result = template;
+            
+            Object.keys(data).forEach(key => {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                result = result.replace(regex, data[key] || '');
+            });
+            
+            // Gestione condizionale
+            result = result.replace(/{{#azienda}}(.*?){{\/azienda}}/g, (match, content) => {
+                return data.azienda ? content.replace(/{{azienda}}/g, data.azienda) : '';
+            });
+            
+            return result;
+        }
+
+        // Statistiche BULK
+        function updateBulkStats() {
+            sendStats.total = recipients.length;
+            sendStats.remaining = sendStats.total - sendStats.sent - sendStats.failed;
+            
+            document.getElementById('totalEmails').textContent = sendStats.total;
+            document.getElementById('sentEmails').textContent = sendStats.sent;
+            document.getElementById('failedEmails').textContent = sendStats.failed;
+            document.getElementById('remainingEmails').textContent = sendStats.remaining;
+            document.getElementById('emailCount').textContent = sendStats.total;
+        }
+
+        // Invio BULK
+        async function startBulkSend() {
+            if (recipients.length === 0) {
+                showStatus('error', '⚠️ Aggiungi almeno un destinatario prima di iniziare l\'invio');
+                return;
+            }
+            
+            const subject = document.getElementById('bulkSubject').value.trim();
+            const content = document.getElementById('bulkContent').value.trim();
+            
+            if (!subject || !content) {
+                showStatus('error', '⚠️ Compila oggetto e contenuto dell\'email');
+                return;
+            }
+            
+            if (!confirm(`🚀 Sei sicuro di voler inviare ${recipients.length} email?`)) {
+                return;
+            }
+            
+            bulkSendActive = true;
+            currentSendIndex = 0;
+            sendStats = { total: recipients.length, sent: 0, failed: 0, remaining: recipients.length };
+            
+            document.getElementById('startBulkBtn').style.display = 'none';
+            document.getElementById('stopBulkBtn').style.display = 'inline-block';
+            document.getElementById('bulkProgress').style.display = 'block';
+            document.getElementById('bulkLogs').style.display = 'block';
+            
+            addBulkLog(`🚀 Iniziato invio BULK di ${recipients.length} email`);
+            showStatus('loading', '<span class="loading-spinner"></span>Invio BULK in corso...');
+            
+            const interval = parseInt(document.getElementById('sendInterval').value) * 1000;
+            
+            for (let i = 0; i < recipients.length && bulkSendActive; i++) {
+                currentSendIndex = i;
+                await sendSingleBulkEmail(recipients[i]);
+                updateBulkProgress();
+                updateBulkStats();
+                
+                if (i < recipients.length - 1 && bulkSendActive) {
+                    await sleep(interval);
+                }
+            }
+            
+            if (bulkSendActive) {
+                showStatus('success', `✅ Invio BULK completato! Inviate: ${sendStats.sent}, Fallite: ${sendStats.failed}`);
+                addBulkLog(`✅ Invio BULK completato! Inviate: ${sendStats.sent}, Fallite: ${sendStats.failed}`);
+            } else {
+                showStatus('warning', '⏹️ Invio BULK interrotto dall\'utente');
+                addBulkLog('⏹️ Invio BULK interrotto dall\'utente');
+            }
+            
+            bulkSendActive = false;
+            document.getElementById('startBulkBtn').style.display = 'inline-block';
+            document.getElementById('stopBulkBtn').style.display = 'none';
+        }
+
+        function stopBulkSend() {
+            bulkSendActive = false;
+            addBulkLog('⏹️ Richiesta interruzione invio BULK');
+        }
+
+        async function sendSingleBulkEmail(recipient) {
+            try {
+                const subject = document.getElementById('bulkSubject').value;
+                const content = document.getElementById('bulkContent').value;
+                const senderName = document.getElementById('bulkSenderName').value;
+                const senderEmail = document.getElementById('bulkSenderEmail').value;
+                
+                const templateData = {
+                    nome: recipient.name,
+                    email: recipient.email,
+                    azienda: recipient.company,
+                    cognome: recipient.surname,
+                    mittente: senderName,
+                    email_mittente: senderEmail
+                };
+                
+                const processedSubject = replaceTemplateVariables(subject, templateData);
+                const processedContent = replaceTemplateVariables(content, templateData);
+                
+                const emailData = {
+                    to: recipient.email,
+                    subject: processedSubject,
+                    text: processedContent,
+                    from: senderEmail,
+                    fromName: senderName
+                };
+                
+                const response = await fetch('/send-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(emailData)
+                });
+                
+                if (response.ok) {
+                    sendStats.sent++;
+                    addBulkLog(`✅ Email inviata a: ${recipient.email}`);
+                } else {
+                    const error = await response.text();
+                    sendStats.failed++;
+                    addBulkLog(`❌ Errore invio a ${recipient.email}: ${error}`);
+                }
+                
+            } catch (error) {
+                sendStats.failed++;
+                addBulkLog(`❌ Errore invio a ${recipient.email}: ${error.message}`);
+            }
+        }
+
+        function updateBulkProgress() {
+            const progress = ((currentSendIndex + 1) / recipients.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function addBulkLog(message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            const logItem = document.createElement('div');
+            logItem.style.cssText = 'padding: 6px 10px; margin-bottom: 4px; border-radius: 4px; font-family: monospace; font-size: 12px; background: #e9ecef; border-left: 3px solid #43b047;';
+            logItem.innerHTML = `[${timestamp}] ${message}`;
+            logContainer.appendChild(logItem);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearBulkLogs() {
+            if (confirm('⚠️ Sei sicuro di voler cancellare tutti i log?')) {
+                document.getElementById('logContainer').innerHTML = '';
+                addBulkLog('📅 Log puliti - Sistema pronto');
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+            checkServer(); // Controlla subito lo stato del server
+            
+            const inputs = document.querySelectorAll('#emailForm input, #emailForm textarea, #emailForm select');
+            inputs.forEach(input => {
+                input.addEventListener('input', updatePreview);
+                input.addEventListener('change', updatePreview);
+            });
+
+            // Controlla il server ogni 30 secondi
+            setInterval(checkServer, 30000);
+
+            // Event listeners per modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            document.getElementById('codeModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

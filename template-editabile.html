@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+  <title>Flex Trade - Email Template</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    /* Reset & Base Styles */
+    * { box-sizing: border-box; }
+    body, table, td, p, div, span, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; display: block; outline: none; text-decoration: none; }
+    
+    /* Gmail-safe base */
+    body {
+      background-color: #f4f7f5 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Main container */
+    .email-wrapper {
+      background-color: #f4f7f5;
+      padding: 20px 0;
+    }
+    
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(67, 176, 71, 0.12);
+      border: 1px solid #e8f5e8;
+    }
+    
+    /* Header with gradient */
+    .header-section {
+      background: linear-gradient(135deg, #2d5016 0%, #43b047 50%, #5cb85c 100%);
+      padding: 40px 30px 30px 30px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .header-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="%23ffffff" opacity="0.05"/><circle cx="60" cy="40" r="1" fill="%23ffffff" opacity="0.05"/><circle cx="80" cy="70" r="1" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+    }
+    
+    .logo-container {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .logo-flex {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 48px;
+      color: #ffffff;
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      margin-bottom: 8px;
+    }
+    
+    .logo-trade {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      color: #d9ead3;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+    }
+    
+    .badge-military {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Content section */
+    .content-section {
+      padding: 50px 40px;
+      background-color: #ffffff;
+    }
+    
+    .content-text {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #2d3436;
+      margin-bottom: 30px;
+    }
+    
+    .highlight-box {
+      background: linear-gradient(135deg, #f8fffe 0%, #e8f5e8 100%);
+      border-left: 6px solid #43b047;
+      padding: 25px 30px;
+      margin: 30px 0;
+      border-radius: 0 12px 12px 0;
+      box-shadow: 0 4px 20px rgba(67, 176, 71, 0.08);
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+      color: #ffffff !important;
+      text-decoration: none !important;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 16px 40px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 6px 20px rgba(67, 176, 71, 0.3);
+      transition: all 0.3s ease;
+      border: none;
+      margin: 20px 0;
+    }
+    
+    /* Partners section */
+    .partners-section {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fffe 100%);
+      padding: 40px 30px;
+      text-align: center;
+      border-top: 1px solid #e8f5e8;
+    }
+    
+    .partners-title {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #636e72;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+    }
+    
+    .partners-grid {
+      display: table;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    
+    .partner-cell {
+      display: table-cell;
+      width: 25%;
+      vertical-align: middle;
+      text-align: center;
+      padding: 10px;
+    }
+    
+    .partner-logo {
+      max-width: 100px;
+      max-height: 50px;
+      opacity: 0.7;
+      filter: grayscale(100%);
+      transition: all 0.3s ease;
+    }
+    
+    .footer-link {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      color: #636e72;
+    }
+    
+    .footer-link a {
+      color: #43b047;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .signature {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      color: #2d3436;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+    
+    /* Mobile responsiveness */
+    @media only screen and (max-width: 600px) {
+      .email-container { 
+        margin: 10px !important; 
+        border-radius: 12px !important;
+      }
+      .header-section { 
+        padding: 30px 20px 25px 20px !important; 
+      }
+      .logo-flex { 
+        font-size: 36px !important; 
+      }
+      .logo-trade { 
+        font-size: 16px !important; 
+      }
+      .badge-military { 
+        font-size: 11px !important; 
+        padding: 8px 15px !important; 
+      }
+      .content-section { 
+        padding: 30px 25px !important; 
+      }
+      .content-text { 
+        font-size: 15px !important; 
+      }
+      .highlight-box { 
+        padding: 20px !important; 
+        margin: 20px 0 !important; 
+      }
+      .cta-button { 
+        padding: 14px 30px !important; 
+        font-size: 15px !important; 
+      }
+      .partners-section { 
+        padding: 30px 20px !important; 
+      }
+      .partner-cell { 
+        display: block !important; 
+        width: 100% !important; 
+        margin-bottom: 15px !important; 
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .content-text { color: #2d3436 !important; }
+      .signature { color: #2d3436 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse: collapse;">
+      <tr>
+        <td align="center" style="padding: 0;">
+          
+          <!-- Main Email Container -->
+          <div class="email-container">
+            
+            <!-- Header Section -->
+            <div class="header-section">
+              <div class="header-pattern"></div>
+              <div class="logo-container">
+                <div class="logo-flex">FLEX</div>
+                <div class="logo-trade">TRADE</div>
+                <div class="badge-military">[MODIFICA QUI IL BADGE - es: Nouvelle Collection Militaire]</div>
+              </div>
+            </div>
+            
+            <!-- Content Section -->
+            <div class="content-section">
+              <div class="content-text">
+                <strong>Bonjour,</strong>
+              </div>
+              
+              <div class="content-text">
+                [MODIFICA QUI IL CONTENUTO PRINCIPALE - Descrivi qui il prodotto o servizio che vuoi promuovere]
+              </div>
+              
+              <div class="highlight-box">
+                <div class="content-text" style="margin-bottom: 0;">
+                  [MODIFICA QUI IL CONTENUTO EVIDENZIATO - Inserisci qui la call-to-action o le informazioni più importanti]
+                </div>
+              </div>
+              
+              <div class="content-text">
+                [MODIFICA QUI DETTAGLI AGGIUNTIVI - Aggiungi qui ulteriori informazioni sui prodotti o servizi]
+              </div>
+              
+              <div class="content-text">
+                [MODIFICA QUI LA CONCLUSIONE - Inserisci qui il messaggio di chiusura]
+              </div>
+              
+              <div style="text-align: center; margin: 40px 0;">
+                <a href="mailto:[MODIFICA-EMAIL]@flextrade.it?subject=[MODIFICA-OGGETTO]" class="cta-button">[MODIFICA TESTO BOTTONE]</a>
+              </div>
+              
+              <div class="signature">
+                Cordialement,<br>
+                <strong>[MODIFICA FIRMA - es: L'équipe FLEX TRADE]</strong>
+              </div>
+            </div>
+            
+            <!-- Partners Section -->
+            <div class="partners-section">
+              <div class="partners-title">Nos Partenaires de Confiance</div>
+              
+              <div class="partners-grid">
+                <div class="partner-cell">
+                  <img src="https://www.ivecodefencevehicles.com/themes/custom/iveco_defence/logo.png" alt="IVECO Defence" class="partner-logo">
+                </div>
+                <div class="partner-cell">
+                  <img src="https://www.coelmo.it/wp-content/uploads/2021/03/logo-coelmo.png" alt="COELMO" class="partner-logo">
+                </div>
+                <div class="partner-cell">
+                  <img src="https://www.hytera.com/themes/hytera/images/logo.png" alt="Hytera" class="partner-logo">
+                </div>
+                <div class="partner-cell">
+                  <img src="https://www.eaglesecurity.it/wp-content/uploads/2021/03/logo-eagle.png" alt="Eagle Security" class="partner-logo">
+                </div>
+              </div>
+              
+              <div class="footer-link">
+                Découvrez notre site web en <a href="https://flextrade.it" target="_blank">cliquant ici</a>
+              </div>
+            </div>
+            
+          </div>
+          
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
